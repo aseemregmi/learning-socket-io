@@ -33,7 +33,9 @@ document.getElementById('message-form').addEventListener('submit', e => {
       from: 'User',
       text: document.getElementById('text-box').value
     },
-    data => console.log(data)
+    () => {
+      document.getElementById('text-box').value = '';
+    }
   );
 });
 
@@ -43,6 +45,8 @@ locationButton.addEventListener('click', e => {
   if (!navigator.geolocation) {
     return alert('Geolocation not supported by your browser');
   }
+  locationButton.textContent = 'Sending Location';
+  locationButton.setAttribute('disabled', 'disabled');
 
   navigator.geolocation.getCurrentPosition(
     function(position) {
@@ -50,9 +54,13 @@ locationButton.addEventListener('click', e => {
         lattitude: position.coords.latitude,
         longitude: position.coords.longitude
       });
+      locationButton.removeAttribute('disabled');
+      locationButton.textContent = 'Send Location';
     },
     function() {
       alert('Unable to fetch location');
+      locationButton.removeAttribute('disabled');
+      locationButton.textContent = 'Send Location';
     }
   );
 });
