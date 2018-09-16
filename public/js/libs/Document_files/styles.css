@@ -214,14 +214,3 @@ button:disabled {
     margin-right: 0;
   }
 }
-
-a {
-  text-decoration: none;
-}
-
-a:visited,
-a:active,
-a {
-  color: black;
-  font-weight: 600;
-}

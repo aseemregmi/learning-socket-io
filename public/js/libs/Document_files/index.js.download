@@ -8,24 +8,37 @@ socket.on('disconnect', function() {
 });
 
 socket.on('newMessage', function(message) {
-  console.log('New Message Received');
-  console.log(message.text);
-  let li = document.createElement('li');
-  li.innerText = `${message.from}: ${message.text}`;
+  let formattedTime = moment(message.createdAt).format('h:mm a');
+  const mustacheHtml = Mustache.render(
+    document.getElementById('message-template').innerHTML,
+    {
+      from: message.from,
+      text: message.text,
+      createdAt: formattedTime
+    }
+  );
 
-  document.getElementById('messages').appendChild(li);
+  const html = document.createElement('div');
+  html.innerHTML = mustacheHtml;
+
+  document.getElementById('messages').appendChild(html);
 });
 
 socket.on('newLocationMessage', function(message) {
+  let formattedTime = moment(message.createdAt).format('h:mm a');
   let li = document.createElement('li');
-  li.innerHTML = `<a href=${message.url} target="_blank">Location of ${
-    message.from
-  }</a>`;
+  li.innerHTML = `${message.from} ${formattedTime} : <a href=${
+    message.url
+  } target="_blank">My Location</a>`;
   document.getElementById('messages').appendChild(li);
 });
 
 document.getElementById('message-form').addEventListener('submit', e => {
   e.preventDefault();
+
+  if (document.getElementById('text-box').value.trim() === '') {
+    return;
+  }
 
   socket.emit(
     'createMessage',
