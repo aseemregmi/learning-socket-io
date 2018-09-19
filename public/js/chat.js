@@ -7,9 +7,6 @@ function scrollToBottom() {
   const clientHeight = messages.clientHeight;
   const scrollTop = messages.scrollTop;
   const scrollHeight = messages.scrollHeight;
-  console.log('Client Height : ', clientHeight);
-  console.log('ScrollTop : ', scrollTop);
-  console.log('Scroll Height : ', scrollHeight);
 
   if (clientHeight + scrollTop + 100 >= scrollHeight) {
     messages.scrollTo(0, scrollHeight);
@@ -18,6 +15,28 @@ function scrollToBottom() {
 
 socket.on('connect', function() {
   console.log('Connected to server');
+  const params = jQuery.deparam(window.location.search);
+
+  socket.emit('join', params, function(err) {
+    if (err) {
+      alert(err);
+      window.location.href = '/';
+    } else {
+      console.log('No errors');
+    }
+  });
+});
+
+socket.on('updateUserList', function(users) {
+  console.log('Update User List');
+  document.getElementById('users').innerHTML = '';
+  const ul = document.createElement('ol');
+  let usersLi = '';
+  users.forEach(user => {
+    usersLi += `<li>${user}</li>`;
+  });
+  ul.innerHTML = usersLi;
+  document.getElementById('users').innerHTML = ul.innerHTML;
 });
 
 socket.on('disconnect', function() {
