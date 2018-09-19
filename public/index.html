@@ -23,11 +23,32 @@
         <label>Room Name :</label>
         <input type="text" name="room-name">
       </div>
+      <div class="form-field" id="available-rooms">
+
+      </div>
       <div class="form-field">
         <button>Join</button>
       </div>
     </form>
   </div>
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script>
+
+    const socket = io();
+
+    socket.on('connect', function () {
+      socket.on('getAvailableRooms', rooms => {
+        let roomsList = 'Active Rooms : <br>';
+        rooms.forEach(room => {
+          roomsList += `<span>${room}</span><br>`;
+        });
+        document.getElementById('available-rooms').innerHTML = roomsList;
+      })
+    });
+
+  </script>
+
 </body>
 
 </html>

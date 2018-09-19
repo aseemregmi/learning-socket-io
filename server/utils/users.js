@@ -39,6 +39,16 @@ class User {
     let namesArray = users.map(user => user.name);
     return namesArray;
   }
+  getAllAvailableRooms() {
+    let rooms = this.users.map(user => user.room);
+    let unique = new Set();
+    return rooms.filter(room => {
+      if (!unique.has(room)) {
+        unique.add(room);
+        return true;
+      }
+    });
+  }
 }
 
 module.exports = {
